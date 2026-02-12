@@ -94,6 +94,7 @@ int CadCartas()
     printf("Área: %.2f\n", areaCidade2);
     printf("PIB: %.2f\n", pibCidade2);
     printf("Pontos turísticos: %d\n", pontosTuristicosCidade2);
+    //
 }
 
 int main()
