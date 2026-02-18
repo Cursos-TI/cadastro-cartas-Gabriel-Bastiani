@@ -12,6 +12,11 @@ int CadCartas(char *estadoCarta1, char *estadoCarta2, char nomeCidade1[1000], ch
     pra cada dados, vai haver 2 variaveis iguais*/
 
     // perguntar os dados Cidade 1
+    printf("\n-----------------------------\n");
+    printf("\nBem-vindo ao cadastro de cartas do Super Trunfo Aventureiro!\n");
+    printf("\n-----------------------------\n");
+    printf("\nVamos começar cadastrando a Carta 1\n");
+    
     printf("Digite o estado da carta 1: ");
     scanf(" %c", estadoCarta1);
     getchar();
@@ -44,7 +49,7 @@ int CadCartas(char *estadoCarta1, char *estadoCarta2, char nomeCidade1[1000], ch
     //
     printf("\n-----------------------------\n");
     // perguntar os dados Cidade 2
-    
+    printf("Vamos cadastrar a Carta 2\n");
     printf("\nDigite o estado da carta 2: ");
     scanf(" %c", estadoCarta2);
     getchar();
@@ -85,8 +90,8 @@ void calcularDensidadePopulacional(int populacaoCidade1, int populacaoCidade2, f
 void calcularPibPerCapita(float pibCidade1, float pibCidade2, int populacaoCidade1, int populacaoCidade2, float *pibPerCapitaCidade1, float *pibPerCapitaCidade2)
 {
     // código para calcular PIB per capita
-    *pibPerCapitaCidade1 = (float)pibCidade1 / populacaoCidade1;
-    *pibPerCapitaCidade2 = (float)pibCidade2 / populacaoCidade2;
+    *pibPerCapitaCidade1 = (float)(pibCidade1 *1000000000.0) / populacaoCidade1;
+    *pibPerCapitaCidade2 = (float)(pibCidade2 *1000000000.0) / populacaoCidade2;
 }
 
 void exibirCartas(char estadoCarta1, char estadoCarta2, char nomeCidade1[1000], char nomeCidade2[1000], float areaCidade1, float areaCidade2, float pibCidade1, float pibCidade2, int codCarta1, int codCarta2, int pontosTuristicosCidade1, int pontosTuristicosCidade2, int populacaoCidade1, int populacaoCidade2, float densidadePopulacionalCidade1, float densidadePopulacionalCidade2, float pibPerCapitaCidade1, float pibPerCapitaCidade2)
