@@ -4,7 +4,7 @@
 #define TAM_CIDADE 1000 // definir o tamanho do nome da cidade como 1000 caracteres
 // Quando passmos um array como parâmetro de função em C, ele decai para um pointer, então sizeof(variavel) retorna o tamanho do pointer (8 bytes), não o tamanho passado pra Array!
 
-int CadCartas(char *estadoCarta1, char *estadoCarta2, char nomeCidade1[1000], char nomeCidade2[1000], int tamNome, float *areaCidade1, float *areaCidade2, float *pibCidade1, float *pibCidade2, int *codCarta1, int *codCarta2, int *pontosTuristicosCidade1, int *pontosTuristicosCidade2, int *populacaoCidade1, int *populacaoCidade2)
+int CadCartas(char *estadoCarta1, char *estadoCarta2, char nomeCidade1[1000], char nomeCidade2[1000], int tamNome, float *areaCidade1, float *areaCidade2, float *pibCidade1, float *pibCidade2, int *codCarta1, int *codCarta2, int *pontosTuristicosCidade1, int *pontosTuristicosCidade2, unsigned long int *populacaoCidade1, unsigned long int *populacaoCidade2)
 {
     // código para cadastrar carta
     /*Dados de entrada
@@ -80,21 +80,29 @@ int CadCartas(char *estadoCarta1, char *estadoCarta2, char nomeCidade1[1000], ch
     getchar(); // consumir o caractere de nova linha deixado pelo scanf
 }
 
-void calcularDensidadePopulacional(int populacaoCidade1, int populacaoCidade2, float areaCidade1, float areaCidade2, float *densidadePopulacionalCidade1, float *densidadePopulacionalCidade2)
+void calcularDensidadePopulacional(unsigned long int populacaoCidade1, unsigned long int populacaoCidade2, float areaCidade1, float areaCidade2, float *densidadePopulacionalCidade1, float *densidadePopulacionalCidade2)
 {
     // código para calcular densidade populacional
     *densidadePopulacionalCidade1 = (float)populacaoCidade1 / areaCidade1;
     *densidadePopulacionalCidade2 = (float)populacaoCidade2 / areaCidade2;
 }
 
-void calcularPibPerCapita(float pibCidade1, float pibCidade2, int populacaoCidade1, int populacaoCidade2, float *pibPerCapitaCidade1, float *pibPerCapitaCidade2)
+void calcularPibPerCapita(float pibCidade1, float pibCidade2, unsigned long int populacaoCidade1, unsigned long int populacaoCidade2, float *pibPerCapitaCidade1, float *pibPerCapitaCidade2)
 {
     // código para calcular PIB per capita
     *pibPerCapitaCidade1 = (float)(pibCidade1 *1000000000.0) / populacaoCidade1; // multiplicar o PIB por 1 bilhão para converter de bilhões para unidades monetárias, e depois dividir pela população para obter o PIB per capita
     *pibPerCapitaCidade2 = (float)(pibCidade2 *1000000000.0) / populacaoCidade2;
 }
 
-void exibirCartas(char estadoCarta1, char estadoCarta2, char nomeCidade1[1000], char nomeCidade2[1000], float areaCidade1, float areaCidade2, float pibCidade1, float pibCidade2, int codCarta1, int codCarta2, int pontosTuristicosCidade1, int pontosTuristicosCidade2, int populacaoCidade1, int populacaoCidade2, float densidadePopulacionalCidade1, float densidadePopulacionalCidade2, float pibPerCapitaCidade1, float pibPerCapitaCidade2)
+//Calcular o Super Poder: Para cada carta, calcule o "Super Poder" somando todos os atributos numéricos (população, área, PIB, número de pontos turísticos, PIB per capita e o inverso da densidade populacional – quanto menor a densidade, maior o "poder").
+void calcularSuperPoder(unsigned long int populacaoCidade1, unsigned long int populacaoCidade2, float areaCidade1, float areaCidade2, float pibCidade1, float pibCidade2, int pontosTuristicosCidade1, int pontosTuristicosCidade2, float densidadePopulacionalCidade1, float densidadePopulacionalCidade2, float pibPerCapitaCidade1, float pibPerCapitaCidade2, float *superPoderCidade1, float *superPoderCidade2)
+{
+    // código para calcular o Super Poder
+    *superPoderCidade1 = (float)(populacaoCidade1 + areaCidade1 + pibCidade1 + pontosTuristicosCidade1 + pibPerCapitaCidade1 + (1.0 / densidadePopulacionalCidade1));// o inverso da densidade populacional é calculado como 1 dividido pela densidade populacional, para que cidades com menor densidade tenham um valor maior contribuindo para o Super Poder.
+    *superPoderCidade2 = (float)(populacaoCidade2 + areaCidade2 + pibCidade2 + pontosTuristicosCidade2 + pibPerCapitaCidade2 + (1.0 / densidadePopulacionalCidade2));
+}
+
+void exibirCartas(char estadoCarta1, char estadoCarta2, char nomeCidade1[1000], char nomeCidade2[1000], float areaCidade1, float areaCidade2, float pibCidade1, float pibCidade2, int codCarta1, int codCarta2, int pontosTuristicosCidade1, int pontosTuristicosCidade2, unsigned long int populacaoCidade1, unsigned long int populacaoCidade2, float densidadePopulacionalCidade1, float densidadePopulacionalCidade2, float pibPerCapitaCidade1, float pibPerCapitaCidade2, float superPoderCidade1, float superPoderCidade2)
 {
     // código para exibir cartas cadastradas
     // print todas as infos da cidade 1
@@ -108,6 +116,7 @@ void exibirCartas(char estadoCarta1, char estadoCarta2, char nomeCidade1[1000], 
     printf("Pontos turísticos: %d\n", pontosTuristicosCidade1);
     printf("Densidade populacional: %.2f\n", densidadePopulacionalCidade1);
     printf("PIB per capita: %.2f\n", pibPerCapitaCidade1);
+    printf("Super Poder: %.2Lf\n", superPoderCidade1);
 
     printf("\n-----------------------------\n");
 
@@ -122,19 +131,41 @@ void exibirCartas(char estadoCarta1, char estadoCarta2, char nomeCidade1[1000], 
     printf("Pontos turísticos: %d\n", pontosTuristicosCidade2);
     printf("Densidade populacional: %.2f\n", densidadePopulacionalCidade2);
     printf("PIB per capita: %.2f\n", pibPerCapitaCidade2);
+    printf("Super Poder: %.2Lf\n", superPoderCidade2);
     //
 }
+
+//exibir comparação entre as cartas, indicando qual carta tem o maior atributo em cada categoria (população, área, PIB, número de pontos turísticos, densidade populacional, PIB per capita e Super Poder).
+//fazer de forma simples sem if, usando operadores ternários ou algo do tipo
+void exibirComparacaoCartas(unsigned long int populacaoCidade1, unsigned long int populacaoCidade2, float areaCidade1, float areaCidade2, float pibCidade1, float pibCidade2, int pontosTuristicosCidade1, int pontosTuristicosCidade2, float densidadePopulacionalCidade1, float densidadePopulacionalCidade2, float pibPerCapitaCidade1, float pibPerCapitaCidade2, float superPoderCidade1, float superPoderCidade2)
+{
+
+    printf("\nComparação entre as cartas:\n");
+    printf("População: Carta 1 venceu (%u)\n", (populacaoCidade1 > populacaoCidade2));
+    printf("Área: Carta 1 venceu (%u)\n", (areaCidade1 > areaCidade2));
+    printf("PIB: Carta 1 venceu (%u)\n", (pibCidade1 > pibCidade2));
+    printf("Pontos turísticos: Carta 1 venceu (%u)\n", (pontosTuristicosCidade1 > pontosTuristicosCidade2));
+    printf("Densidade populacional: Carta 1 venceu (%u)\n", (densidadePopulacionalCidade1 < densidadePopulacionalCidade2)); // para densidade populacional, a carta com menor valor é a vencedora
+    printf("PIB per capita: Carta 1 venceu (%u)\n", (pibPerCapitaCidade1 > pibPerCapitaCidade2));
+    printf("Super Poder: Carta 1 venceu (%u)\n", (superPoderCidade1 > superPoderCidade2));
+
+}//
 
 int main()
 { // Variáveis para armazenar os dados das cartas
     char estadoCarta1, estadoCarta2, nomeCidade1[1000], nomeCidade2[1000];
     float areaCidade1, areaCidade2, pibCidade1, pibCidade2, densidadePopulacionalCidade1, densidadePopulacionalCidade2, pibPerCapitaCidade1, pibPerCapitaCidade2;
-    int codCarta1, codCarta2, pontosTuristicosCidade1, pontosTuristicosCidade2, populacaoCidade1, populacaoCidade2;
+    int codCarta1, codCarta2, pontosTuristicosCidade1, pontosTuristicosCidade2;
+    float superPoderCidade1, superPoderCidade2;
+    unsigned long int populacaoCidade1, populacaoCidade2;
 
     // chamar as funções para cadastrar cartas, calcular densidade populacional, calcular PIB per capita e exibir as cartas cadastradas
     CadCartas(&estadoCarta1, &estadoCarta2, nomeCidade1, nomeCidade2, TAM_CIDADE, &areaCidade1, &areaCidade2, &pibCidade1, &pibCidade2, &codCarta1, &codCarta2, &pontosTuristicosCidade1, &pontosTuristicosCidade2, &populacaoCidade1, &populacaoCidade2);
     calcularDensidadePopulacional(populacaoCidade1, populacaoCidade2, areaCidade1, areaCidade2, &densidadePopulacionalCidade1, &densidadePopulacionalCidade2);
     calcularPibPerCapita(pibCidade1, pibCidade2, populacaoCidade1, populacaoCidade2, &pibPerCapitaCidade1, &pibPerCapitaCidade2);
-    exibirCartas(estadoCarta1, estadoCarta2, nomeCidade1, nomeCidade2, areaCidade1, areaCidade2, pibCidade1, pibCidade2, codCarta1, codCarta2, pontosTuristicosCidade1, pontosTuristicosCidade2, populacaoCidade1, populacaoCidade2, densidadePopulacionalCidade1, densidadePopulacionalCidade2, pibPerCapitaCidade1, pibPerCapitaCidade2);
+    calcularSuperPoder(populacaoCidade1, populacaoCidade2, areaCidade1, areaCidade2, pibCidade1, pibCidade2, pontosTuristicosCidade1, pontosTuristicosCidade2, densidadePopulacionalCidade1, densidadePopulacionalCidade2, pibPerCapitaCidade1, pibPerCapitaCidade2, &superPoderCidade1, &superPoderCidade2);   
+    exibirCartas(estadoCarta1, estadoCarta2, nomeCidade1, nomeCidade2, areaCidade1, areaCidade2, pibCidade1, pibCidade2, codCarta1, codCarta2, pontosTuristicosCidade1, pontosTuristicosCidade2, populacaoCidade1, populacaoCidade2, densidadePopulacionalCidade1, densidadePopulacionalCidade2, pibPerCapitaCidade1, pibPerCapitaCidade2, superPoderCidade1, superPoderCidade2);
+    exibirComparacaoCartas(populacaoCidade1, populacaoCidade2, areaCidade1, areaCidade2, pibCidade1, pibCidade2, pontosTuristicosCidade1, pontosTuristicosCidade2, densidadePopulacionalCidade1, densidadePopulacionalCidade2, pibPerCapitaCidade1, pibPerCapitaCidade2, superPoderCidade1, superPoderCidade2);
+   
     return 0;
 }
