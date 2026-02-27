@@ -21,7 +21,15 @@ int main(){
     opcaoComputador = rand() % 3; // Gera um número entre 0 e 2
 
     printf("\nVocê escolheu: %d" , opcao);
-    printf("\nComputador escolheu: %d" , opcaoComputador);
+    
+    if(opcaoComputador == 0){
+        printf("\nO computador escolheu: 0 - Pedra");
+    } else if(opcaoComputador == 1){
+        printf("\nO computador escolheu: 1 - Papel");
+    } else {
+        printf("\nO computador escolheu: 2 - Tesoura");
+    }
+
     
     switch (opcao)
     {
